@@ -1,0 +1,109 @@
+module clock_divider_1hz (clk_en, clk, rst);
+
+    input clk, rst;
+    output reg clk_en;
+
+    reg [23:0] count; 
+
+    always @(posedge clk or posedge rst) begin
+        if (rst) begin
+            count <= 0;
+            clk_en <= 0;
+        end
+        else begin
+            if (count == 12_000_000 - 1) begin
+                count <= 0;
+                clk_en <= 1;   
+            end
+            else begin
+                count <= count + 1;
+                clk_en <= 0;
+            end
+        end
+    end
+
+endmodule
+
+
+module SYNCHRONOUS_FIFO(data_out, clk, rst, wr_en, rd_en, data_in);
+
+    input clk, rst, wr_en, rd_en;
+    input [3:0] data_in;
+    output reg [3:0] data_out;
+
+
+    wire clk_en;
+
+    clock_divider_1hz div (
+        .clk(clk),
+        .rst(rst),
+        .clk_en(clk_en)
+    );
+
+    parameter FIFO_DEPTH = 8;
+
+    reg [2:0] write_ptr, read_ptr;
+    reg [3:0] count;
+
+    reg [3:0] FIFO_MEM [0:FIFO_DEPTH-1];
+
+    wire full  = (count == FIFO_DEPTH);
+    wire empty = (count == 0);
+
+    always @(posedge clk or posedge rst) begin
+    if (rst) begin
+            count <= 0;
+            write_ptr <= 0;
+            read_ptr <= 0;
+            data_out <= 0;
+    end
+        else begin
+            if(clk_en) begin
+            case ({wr_en, rd_en})
+
+                2'b10: begin
+                    if (!full) begin
+                        FIFO_MEM[write_ptr] <= data_in;
+                        write_ptr <= write_ptr + 1;
+                        count <= count + 1;
+                    end
+                end
+
+                2'b01: begin
+                    if (!empty) begin
+                        data_out <= FIFO_MEM[read_ptr];
+                        read_ptr <= read_ptr + 1;
+                        count <= count - 1;
+                    end
+                end
+
+                2'b00: begin
+                    // do nothing
+                end
+
+                2'b11: begin
+                    if (!full && !empty) begin
+                        FIFO_MEM[write_ptr] <= data_in;
+                        write_ptr <= write_ptr + 1;
+
+                        data_out <= FIFO_MEM[read_ptr];
+                        read_ptr <= read_ptr + 1;
+                    end
+                    else if (full) begin
+                        data_out <= FIFO_MEM[read_ptr];
+                        read_ptr <= read_ptr + 1;
+                        count <= count - 1;
+                    end
+                    else if (empty) begin
+                        FIFO_MEM[write_ptr] <= data_in;
+                        write_ptr <= write_ptr + 1;
+                        count <= count + 1;
+                    end
+                end
+
+            endcase
+        end
+      end
+    end
+
+endmodule
