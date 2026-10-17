@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 520" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+  </defs>
+  <rect width="1160" height="520" fill="#ffffff"/>
+  <text x="580" y="32" text-anchor="middle" font-size="20" font-weight="bold" fill="#0f172a">SYNCHRONOUS_FIFO · 8 × 4-bit synchronous FIFO on the Digilent Arty S7 (Spartan-7)</text>
+
+  <!-- board I/O column -->
+  <g font-size="13">
+    <rect x="16" y="86" width="150" height="56" rx="8" fill="#f1f5f9" stroke="#64748b"/>
+    <text x="91" y="110" text-anchor="middle" font-weight="bold" fill="#0f172a">SW0 – SW3</text>
+    <text x="91" y="128" text-anchor="middle" fill="#475569">H14 H18 G18 M5</text>
+    <rect x="16" y="160" width="150" height="56" rx="8" fill="#f1f5f9" stroke="#64748b"/>
+    <text x="91" y="184" text-anchor="middle" font-weight="bold" fill="#0f172a">BTN1 (K16)</text>
+    <text x="91" y="202" text-anchor="middle" fill="#475569">write enable</text>
+    <rect x="16" y="234" width="150" height="56" rx="8" fill="#f1f5f9" stroke="#64748b"/>
+    <text x="91" y="258" text-anchor="middle" font-weight="bold" fill="#0f172a">BTN2 (J16)</text>
+    <text x="91" y="276" text-anchor="middle" fill="#475569">read enable</text>
+    <rect x="16" y="308" width="150" height="56" rx="8" fill="#f1f5f9" stroke="#64748b"/>
+    <text x="91" y="332" text-anchor="middle" font-weight="bold" fill="#0f172a">BTN0 (G15)</text>
+    <text x="91" y="350" text-anchor="middle" fill="#475569">reset (active high)</text>
+    <rect x="16" y="400" width="150" height="56" rx="8" fill="#f1f5f9" stroke="#64748b"/>
+    <text x="91" y="424" text-anchor="middle" font-weight="bold" fill="#0f172a">12 MHz osc (F14)</text>
+    <text x="91" y="442" text-anchor="middle" fill="#475569">clk, 83.333 ns</text>
+  </g>
+
+  <!-- FIFO boundary -->
+  <rect x="212" y="62" width="760" height="436" rx="14" fill="#f8fafc" stroke="#94a3b8" stroke-width="2" stroke-dasharray="8 5"/>
+  <text x="228" y="84" font-size="13" fill="#64748b">SYNCHRONOUS_FIFO (rtl)</text>
+
+  <!-- clock divider -->
+  <rect x="240" y="384" width="230" height="90" rx="10" fill="#fef3c7" stroke="#b45309" stroke-width="2"/>
+  <text x="355" y="410" text-anchor="middle" font-size="14" font-weight="bold" fill="#78350f">clock_divider_1hz</text>
+  <text x="355" y="432" text-anchor="middle" font-size="12" fill="#78350f">24-bit counter, terminal count</text>
+  <text x="355" y="450" text-anchor="middle" font-size="12" fill="#78350f">12,000,000 − 1 → clk_en pulse</text>
+  <text x="355" y="466" text-anchor="middle" font-size="12" fill="#78350f">(one 83 ns pulse per second)</text>
+  <line x1="166" y1="428" x2="238" y2="428" stroke="#334155" stroke-width="2" marker-end="url(#a)"/>
+
+  <!-- control logic -->
+  <rect x="240" y="150" width="230" height="200" rx="10" fill="#e0e7ff" stroke="#4338ca" stroke-width="2"/>
+  <text x="355" y="176" text-anchor="middle" font-size="14" font-weight="bold" fill="#312e81">Control (case {wr_en, rd_en})</text>
+  <text x="252" y="202" font-size="12" fill="#312e81">10 : write if !full</text>
+  <text x="252" y="222" font-size="12" fill="#312e81">01 : read  if !empty</text>
+  <text x="252" y="242" font-size="12" fill="#312e81">11 : both  if !full &amp;&amp; !empty</text>
+  <text x="252" y="258" font-size="12" fill="#312e81">       read only  if full</text>
+  <text x="252" y="274" font-size="12" fill="#312e81">       write only if empty</text>
+  <text x="252" y="294" font-size="12" fill="#312e81">00 : hold</text>
+  <text x="252" y="320" font-size="12" font-weight="bold" fill="#312e81">all actions gated by clk_en</text>
+  <text x="252" y="338" font-size="12" fill="#312e81">async reset: ptrs, count, data_out</text>
+  <line x1="355" y1="384" x2="355" y2="352" stroke="#b45309" stroke-width="2" marker-end="url(#a)"/>
+  <text x="362" y="372" font-size="12" fill="#b45309">clk_en</text>
+
+  <line x1="166" y1="188" x2="238" y2="188" stroke="#334155" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="166" y1="262" x2="238" y2="262" stroke="#334155" stroke-width="2" marker-end="url(#a)"/>
+  <text x="170" y="182" font-size="11" fill="#334155">wr_en</text>
+  <text x="170" y="256" font-size="11" fill="#334155">rd_en</text>
+  <line x1="166" y1="336" x2="238" y2="336" stroke="#334155" stroke-width="2" marker-end="url(#a)"/>
+  <text x="170" y="330" font-size="11" fill="#334155">rst</text>
+
+  <!-- pointers / count -->
+  <rect x="510" y="150" width="140" height="44" rx="6" fill="#ffffff" stroke="#4338ca"/>
+  <text x="580" y="170" text-anchor="middle" font-size="13" fill="#312e81">write_ptr [2:0]</text>
+  <text x="580" y="186" text-anchor="middle" font-size="11" fill="#475569">wraps 7 → 0</text>
+  <rect x="510" y="210" width="140" height="44" rx="6" fill="#ffffff" stroke="#4338ca"/>
+  <text x="580" y="230" text-anchor="middle" font-size="13" fill="#312e81">read_ptr [2:0]</text>
+  <text x="580" y="246" text-anchor="middle" font-size="11" fill="#475569">wraps 7 → 0</text>
+  <rect x="510" y="270" width="140" height="80" rx="6" fill="#ffffff" stroke="#4338ca"/>
+  <text x="580" y="290" text-anchor="middle" font-size="13" fill="#312e81">count [3:0]</text>
+  <text x="580" y="310" text-anchor="middle" font-size="11" fill="#475569">0 … 8</text>
+  <text x="580" y="326" text-anchor="middle" font-size="11" fill="#475569">full  = (count == 8)</text>
+  <text x="580" y="342" text-anchor="middle" font-size="11" fill="#475569">empty = (count == 0)</text>
+  <line x1="470" y1="172" x2="508" y2="172" stroke="#334155" stroke-width="1.5" marker-end="url(#a)"/>
+  <line x1="470" y1="232" x2="508" y2="232" stroke="#334155" stroke-width="1.5" marker-end="url(#a)"/>
+  <line x1="508" y1="310" x2="472" y2="310" stroke="#334155" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="474" y="326" font-size="10" fill="#475569">full/empty</text>
+
+  <!-- memory -->
+  <rect x="700" y="110" width="150" height="260" rx="8" fill="#dbeafe" stroke="#1d4ed8" stroke-width="2"/>
+  <text x="775" y="132" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e3a8a">FIFO_MEM</text>
+  <text x="775" y="150" text-anchor="middle" font-size="11" fill="#1e3a8a">8 words × 4 bits</text>
+  <g font-size="11" fill="#1e3a8a" text-anchor="middle">
+    <rect x="720" y="160" width="110" height="24" fill="#ffffff" stroke="#93c5fd"/><text x="775" y="176">[0]</text>
+    <rect x="720" y="184" width="110" height="24" fill="#ffffff" stroke="#93c5fd"/><text x="775" y="200">[1]</text>
+    <rect x="720" y="208" width="110" height="24" fill="#ffffff" stroke="#93c5fd"/><text x="775" y="224">[2]</text>
+    <rect x="720" y="232" width="110" height="24" fill="#ffffff" stroke="#93c5fd"/><text x="775" y="248">[3]</text>
+    <rect x="720" y="256" width="110" height="24" fill="#ffffff" stroke="#93c5fd"/><text x="775" y="272">[4]</text>
+    <rect x="720" y="280" width="110" height="24" fill="#ffffff" stroke="#93c5fd"/><text x="775" y="296">[5]</text>
+    <rect x="720" y="304" width="110" height="24" fill="#ffffff" stroke="#93c5fd"/><text x="775" y="320">[6]</text>
+    <rect x="720" y="328" width="110" height="24" fill="#ffffff" stroke="#93c5fd"/><text x="775" y="344">[7]</text>
+  </g>
+  <line x1="650" y1="172" x2="718" y2="172" stroke="#334155" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="656" y="166" font-size="10" fill="#475569">waddr</text>
+  <line x1="650" y1="232" x2="718" y2="232" stroke="#334155" stroke-width="1.5" marker-end="url(#a)"/>
+  <text x="656" y="226" font-size="10" fill="#475569">raddr</text>
+
+  <!-- data_in path -->
+  <line x1="166" y1="114" x2="680" y2="114" stroke="#334155" stroke-width="2"/>
+  <line x1="680" y1="114" x2="680" y2="140" stroke="#334155" stroke-width="2"/>
+  <line x1="680" y1="140" x2="698" y2="140" stroke="#334155" stroke-width="2" marker-end="url(#a)"/>
+  <text x="170" y="106" font-size="11" fill="#334155">data_in[3:0]</text>
+
+  <!-- data_out reg -->
+  <line x1="850" y1="240" x2="878" y2="240" stroke="#334155" stroke-width="2" marker-end="url(#a)"/>
+  <rect x="880" y="200" width="76" height="80" rx="6" fill="#dcfce7" stroke="#15803d" stroke-width="2"/>
+  <text x="918" y="230" text-anchor="middle" font-size="12" font-weight="bold" fill="#14532d">data_out</text>
+  <text x="918" y="248" text-anchor="middle" font-size="11" fill="#14532d">register</text>
+  <text x="918" y="264" text-anchor="middle" font-size="11" fill="#14532d">[3:0]</text>
+
+  <!-- LEDs -->
+  <line x1="956" y1="240" x2="996" y2="240" stroke="#334155" stroke-width="2" marker-end="url(#a)"/>
+  <rect x="998" y="200" width="146" height="80" rx="8" fill="#f1f5f9" stroke="#64748b"/>
+  <text x="1071" y="226" text-anchor="middle" font-size="13" font-weight="bold" fill="#0f172a">LD2 – LD5</text>
+  <text x="1071" y="244" text-anchor="middle" font-size="12" fill="#475569">E18 F13 E13 H15</text>
+  <text x="1071" y="262" text-anchor="middle" font-size="12" fill="#475569">show data_out</text>
+</svg>
